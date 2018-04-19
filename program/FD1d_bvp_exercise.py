@@ -5,10 +5,10 @@ from matplotlib import pyplot as plt
 
 
 def f(x):
-    return 16 * (np.pi) ** 2 * np.sin(4 * np.pi * x)
+    return (4 * pow(x, 4) - 15 * x ** 2 + 5) * np.exp(-x ** 2)
 
 def u(x):                #真解函数
-    return np.sin(4 * np.pi * x)
+    return (1 - x ** 2 ) * np.exp(-x ** 2)
 
 #利用中心差分格式求解两点边值问题
 def FD1d_bvp(N, f, a, b, u):
@@ -16,7 +16,7 @@ def FD1d_bvp(N, f, a, b, u):
     x = np.linspace(a, b, N, endpoint=True)
     #创建线性差分方程组系数矩阵
     c1 = - 1 / (h ** 2)
-    c2 = 2 / (h ** 2)
+    c2 = 2 / (h ** 2) + 1
     g = np.hstack((c1 * np.ones(N - 2), 0))
     c = np.hstack((0, c1 * np.ones(N - 2)))
     d = np.hstack((1, c2 * np.ones(N - 2), 1))
@@ -43,7 +43,7 @@ def FD1d_error(x, U, u_exact):
     emax = np.max(abs(ue - U))
     return emax, e0, e1
 
-L = 0
+L = -1
 R = 1
 N = [6, 11, 21, 41, 81]
 X = []
@@ -68,4 +68,3 @@ plt.xlabel("x")
 plt.ylabel("u")
 plt.legend(labels=['exact', 'N=6', 'N=11', 'N=21', 'N=41', 'N=81'])
 plt.show()
-
