@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 def f(x):
     return 16 * (np.pi) ** 2 * np.sin(4 * np.pi * x)
 
-def u(x):                #真解函数
+def u(x):                
     return np.sin(4 * np.pi * x)
 
 #利用中心差分格式求解两点边值问题
