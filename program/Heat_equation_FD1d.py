@@ -2,8 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
-K = 1
+from matplotlib.font_manager import FontProperties
+font = FontProperties(fname=r"/home/ljg/anaconda3/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf/Chinese font.ttf")
 
+K = 1
 def space_grid(a, b, NS):
     X = np.linspace(a, b, NS + 1)
     h = (b - a) / NS
@@ -43,7 +45,7 @@ X, T = np.meshgrid(X, T)
 fig = plt.figure()
 ax = Axes3D(fig)
 ax.plot_surface(X, T, U, rstride=10, cstride=10, cmap = cm.viridis)
-plt.xlabel('X')
-plt.ylabel('T')
+plt.xlabel(u"空间", fontproperties=font)
+plt.ylabel(u"时间", fontproperties=font)
 ax.set_zlabel('U(X, T)')
 plt.show()
