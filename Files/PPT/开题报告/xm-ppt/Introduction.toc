@@ -1,0 +1,6 @@
+\beamer@endinputifotherversion {3.36pt}
+\beamer@sectionintoc {1}{研究背景及现状}{2}{0}{1}
+\beamer@sectionintoc {2}{研究内容及方案}{6}{0}{2}
+\beamer@sectionintoc {3}{工作进展及存在的问题}{11}{0}{3}
+\beamer@sectionintoc {4}{工作进度安排}{15}{0}{4}
+\beamer@sectionintoc {5}{参考文献}{17}{0}{5}

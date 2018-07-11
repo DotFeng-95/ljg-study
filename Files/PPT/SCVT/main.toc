@@ -1,0 +1,13 @@
+\contentsline {section}{\numberline {1}摘要}{1}{section.1}
+\contentsline {section}{\numberline {2}引言}{1}{section.2}
+\contentsline {section}{\numberline {3}基础知识}{2}{section.3}
+\contentsline {section}{\numberline {4}方法}{2}{section.4}
+\contentsline {subsection}{\numberline {4.1}优化算法}{2}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}评判网格质量的标准}{2}{subsection.4.2}
+\contentsline {section}{\numberline {5}数值实验}{2}{section.5}
+\contentsline {subsection}{\numberline {5.1}球面}{2}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}环面}{2}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}心形曲面}{2}{subsection.5.3}
+\contentsline {subsection}{\numberline {5.4}}{2}{subsection.5.4}
+\contentsline {subsection}{\numberline {5.5}}{2}{subsection.5.5}
+\contentsfinish 

@@ -1,0 +1,73 @@
+
+  \only<3>{
+    如$r$-自适应:
+    \begin{figure}
+      \centering
+      % \subfigure[.]{\animategraphics[loop,autoplay]{1}{./figures/rdp-frame-}{0}{78}}
+      % \subfigure[.]{\animategraphics[loop,autoplay]{12}{./figures/rdps-frame-}{0}{78}}
+      \subfigure[.]{\includegraphics[scale=0.2]{./figures/rdp-frame-0.png}}
+      \subfigure[.]{\includegraphics[scale=0.22]{./figures/rdps-frame-0.png}}
+      \caption{反应扩散问题的移动网格模拟[Li, Tang and Zhang 2002]}
+    \end{figure} 
+  }
+
+  \only<4>{
+    如$r$-自适应:
+    \begin{figure}
+      \centering
+      % \subfigure[.]{\animategraphics[loop,autoplay]{1}{./figures/rdp-frame-}{0}{78}}
+      % \subfigure[.]{\animategraphics[loop,autoplay]{12}{./figures/rdps-frame-}{0}{78}}
+      \subfigure[.]{\includegraphics[scale=0.2]{./figures/rdp-frame-20.png}}
+      \subfigure[.]{\includegraphics[scale=0.22]{./figures/rdps-frame-20.png}}
+      \caption{反应扩散问题的移动网格模拟[Li, Tang and Zhang 2002]}
+    \end{figure} 
+  }
+
+  \only<5>{
+    如$r$-自适应:
+    \begin{figure}
+      \centering
+      % \subfigure[.]{\animategraphics[loop,autoplay]{1}{./figures/rdp-frame-}{0}{78}}
+      % \subfigure[.]{\animategraphics[loop,autoplay]{12}{./figures/rdps-frame-}{0}{78}}
+      \subfigure[.]{\includegraphics[scale=0.2]{./figures/rdp-frame-40.png}}
+      \subfigure[.]{\includegraphics[scale=0.22]{./figures/rdps-frame-40.png}}
+      \caption{反应扩散问题的移动网格模拟[Li, Tang and Zhang 2002]}
+    \end{figure} 
+  }
+
+    \only<6>{
+    如 $r$-自适应:
+    \begin{figure}
+      \centering
+      % \subfigure[.]{\animategraphics[loop,autoplay]{1}{./figures/rdp-frame-}{0}{78}}
+      % \subfigure[.]{\animategraphics[loop,autoplay]{12}{./figures/rdps-frame-}{0}{78}}
+      \subfigure[.]{\includegraphics[scale=0.2]{./figures/rdp-frame-78.png}}
+      \subfigure[.]{\includegraphics[scale=0.22]{./figures/rdps-frame-78.png}}
+      \caption{反应扩散问题的移动网格模拟[Li, Tang and Zhang 2002]}
+    \end{figure} 
+  }
+
+
+
+\begin{frame}
+        \begin{algorithm}[H]
+            \caption{Block Gauss iteration method}
+            \begin{algorithmic}[1]
+                \REQUIRE ~\\
+                $N$;\\
+                $X^0, Y^0$;\\
+                \ENSURE ~\\
+                $X^N, Y^N$; 
+                \FOR{$k = 0:N-1$}
+                    \STATE{Construct matrix $A_k$ and $B_k$}
+                    \STATE{Solve $A^kX^{k+1} = -B^kY^k$}
+                    \STATE{Solve $A^kY^{k+1} = B^kX^{k+1}$}
+                \ENDFOR
+            \end{algorithmic}
+        \end{algorithm}
+\end{frame}
+
+
+
+
+

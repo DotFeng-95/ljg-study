@@ -1,0 +1,140 @@
+% !Mode:: "TeX:UTF-8"
+\documentclass{article}
+\input{en_preamble.tex}
+\input{xecjk_preamble.tex}
+\setCJKmainfont{STKaiti} % 如果请替换为本地系统有的字体
+%中文断行
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 12pt plus 12pt 
+\begin{document}
+\title{基于 CVT 技术的曲面网格优化}
+\author{许  明}
+\date{\today}
+\maketitle
+\tableofcontents
+%\newpage
+\section{摘要}
+\section{引言}
+
+网格是有限元计算中的基本工具,网格质量的优劣将直接影响有限元计算过程中的收敛性以及有限元解的, 
+误差,
+
+\section{基础知识}
+
+\section{方法}
+
+\subsection{优化算法}
+\subsection{评判网格质量的标准}
+1. 基于半径比的策略
+2. 最大角最小角策略
+
+\section{数值实验}
+
+本小节主要通过几种不同的曲面网格进行数值实验, 主要包括球面, 环面, double torus,
+heart等, 通过相应的数值结果，可以看出我们的方法在改善网格质量方面十分有效.
+
+\subsection{球面}
+
+
+
+由于球面的曲率是常数, 这里我们给出初始的网格图和 $\gamma=0$ 时的网格优化图.
+\subsection{环面}
+\subsection{心形曲面}
+\subsection{}
+\subsection{}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\section{CVT 基础知识}
+%
+%设 $\{z_i\}\subset \Omega$ 是一有限点集，对于每一个 $i$ ，定义这样一个点集
+%
+%$$
+%V_i = \{x\in \Omega:|x-z_i|< |x-z_j| \text{for} j =1,2,\cdots,N,j \neq i\}
+%$$ 
+%
+%$V_i$ 称做关于 $\mathbf{z}$ 的 Voronio 单元。
+%
+%此定义即，$\{z_i\}$ 的 Voronio 单元的内部任一点 $x$ 到 $z_i$ 的距离小于 $x$ 到 $\{z_j\}_{j\neq i}$ 的距离，同时把 $V_i$ 组成的 $\Omega$ 的分化叫做 $\Omega$ 上的一个 Voronio Tesselation，当生成子和质心重合时，此时 Voronio Tesselation 成为一个 Centroidal Voronoi tessellation(CVT)。
+%
+%$\textbf{质心的表达式}$
+%
+%$$
+%z_i = \frac{\int_{V_i} x \rho(x)\mathrm d{x}}{\int_{V_i}\rho(x)\mathrm d{x}}
+%$$
+%
+%CVT 有着广泛的应用，在计算机图像，图像处理，数据压缩，网格生成与优化方面。
+%
+%\section{CVT 的快速计算}
+%\subsection{有关量的定义}
+%
+%
+%$\Omega\subset R^n$  是一个开区域
+%
+%$\mathbf{z}=\{x_i\}_{i=1}^{N}\subset \Omega$ 是一些特定的点的集合(生成子集合)
+%
+%$V = \{V_i\}_{i=1}^{N}$ 是 $\Omega$ 的特定分割区域, 其中 $V_i$ 的定义为
+%
+%$$
+%V_i = \{x\in \Omega:|x-z_i|< |x-z_j| \text{for} j =1,2,\cdots,N,j \neq i\}
+%$$
+%
+%其中点 $\mathbf{z}$ 叫做生成子
+%
+%我们考虑快速的计算 CVT 的方法，通过一组生成子 $\mathbf{z}$ 和相应的 Voronoi 镶嵌 $V$ 相关联的能量来定义 CVT
+%
+%$$
+%\varepsilon(\mathbf{z},V(\mathbf{z})) = \sum_{i=1}^{N}\varepsilon_i(\mathbf{z},V(\mathbf{z}))=\sum_{i=1}^{N}\int_{V_i}\rho\|x-z_i\|^2\mathrm d{x}
+%$$
+%
+%$\rho$ 是密度函数，它很容易地显示 CVT 是 $\varepsilon$ 的临界点，并且将稳定的 CVT 定义为 $\varepsilon$ 的局部最小点. 换句话说，找到能量 $\varepsilon(\mathbf{z},V(\mathbf{z}))$ 的局部最小值.
+%
+%目的求解 $\nabla \varepsilon = 0$.
+%
+
+\newpage
+\nocite{*}
+\bibliography{ref}
+\end{document}
+

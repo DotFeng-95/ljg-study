@@ -1,0 +1,363 @@
+% !Mode:: "TeX:UTF-8"
+\documentclass[notheorems,serif]{beamer}
+
+%选用主题
+%\usetheme{Rochester}
+\usetheme{default}
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{Dresden}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+% As well as themes, the Beamer class has a number of color themes
+% for any slide theme. Uncomment each of these in turn to see how it
+% changes the colors of your current slide theme.
+
+%\usecolortheme{albatross}
+%\usecolortheme{beaver}
+%\usecolortheme{beetle}
+%\usecolortheme{crane}
+%\usecolortheme{dolphin}
+%\usecolortheme{dove}
+%\usecolortheme{fly}
+%\usecolortheme{lily}
+%usecolortheme{orchid}
+%\usecolortheme{rose}
+%\usecolortheme{seagull}
+%\usecolortheme{seahorse}
+%\usecolortheme{whale}
+%\usecolortheme{wolverine}
+
+%设置被cover的内容不显示
+%\setbeamercovered{transparent}
+
+\useinnertheme{rounded}
+\usecolortheme{default}
+
+
+
+%调用包
+\usepackage[no-math, cm-default]{fontspec}
+\usepackage{xltxtra}
+\usepackage{xunicode}   
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\usepackage{multimedia}
+\usepackage{subfigure}
+\usepackage{animate}
+\usepackage{multirow}
+\usepackage{slashbox}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{xkeyval}
+\usepackage{todonotes}
+\presetkeys{todonotes}{inline}{} 
+\usepackage{multicol}
+\usepackage{changes}
+\usepackage{fancybox}
+%\usepackage{lipsum}% <- For dummy text
+\definechangesauthor[name={Huayi Wei}, color=red]{why}
+
+\renewcommand{\algorithmicrequire}{\textbf{INPUT:}}
+\renewcommand{\algorithmicensure}{\textbf{OUTOUT:}}
+\makeatletter
+\renewcommand*\env@matrix[1][\arraystretch]{%
+  \edef\arraystretch{#1}%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{*\c@MaxMatrixCols c}}
+\makeatother
+
+
+\input{pptheader.tex}
+
+
+\begin{document}
+
+\title[]{The surface finite element method for pattern formation on evolving biological surfaces}
+\author[]{Jianggang Liu\\
+}
+\institute[]{
+\vspace{5pt}
+School of Mathematics and Computational Science\\
+ Xiangtan University
+\vspace{0.5cm}
+}
+\date{\today}
+
+\frame[plain]{\titlepage}
+
+\begin{frame}
+\frametitle{\small Abstract}
+$\qquad$In this article we propose models and a numerical method for pattern formation on evolving curved surfaces. We formulate reaction-diffusion equations on evolving surfaces using the material transport formula, surface gradients and diffusive conservation laws. The evolution of the surface is defined by a material surface velocity. The numerical method is based on the evolving surface finite element method. The key idea is based on the approximation of $S$ by a triangulated surface $S_h$ consisting of a union of triangles with vertices on $S$. A finite element space of functions is then defined by taking the continuous functions on $S_h$ which are linear affine on each simplex of the polygonal surface.  
+\end{frame}
+
+\begin{frame}
+\frametitle{\small 1. Surface gradients}
+$\qquad$We assume that $S$ is a $C^2$-hyper-surface which is the zero level set of a signed distance function $d(x)$ defined on an open subset $\mathcal{U}\subset\mathbb{R}^3$. $\boldsymbol{n}(x)=\nabla d(x)$ is then unit outward pointing normal on $S$. We define the tangential gradient of a function $\eta$ by
+\begin{equation*}
+\nabla_S v=\nabla v-(\nabla v\cdot\boldsymbol{n})\boldsymbol{n} \quad x\in S
+\end{equation*}
+where $\nabla$ denotes the usual gradient in $\mathbb{R}^3$.  
+
+The Laplace-Beltrami operator on $S$ is defined as the tangential divergence of the tangential gradient:  
+\begin{equation*}
+\Delta_S v=\nabla_S\cdot(\nabla_S v)=\Delta v-(\nabla v\cdot\boldsymbol{n})(\nabla\cdot\boldsymbol{n})-\boldsymbol{n}^t\nabla^2v\boldsymbol{n} 
+\end{equation*}
+
+where $\nabla^2v$ is the Hessian matrix of $v$.
+\end{frame}
+
+\begin{frame}
+Let $S$ have a boundary $\partial S$ whose intrinsic unit outer normal, tangential to $S$, is denoted by $\boldsymbol{\nu}$ Then, the formula for integration by parts on $S$ is
+\begin{equation*}
+\int_S\nabla_Sv=-\int_SvH\boldsymbol{n}+\int_{\partial S}v\boldsymbol{\nu}
+\end{equation*}
+
+where $H$ denotes the mean curvature of $S$ with respect to $\boldsymbol{n}$, which is given by 
+\begin{equation*}
+H=-\nabla_S\cdot\boldsymbol{n}
+\end{equation*}
+
+Green's formula on the surface $S$ is
+\begin{equation*}
+\int_S\nabla_Su\cdot\nabla_Sv=\int_{\partial S}u\nabla_Sv\cdot\boldsymbol{\nu}-\int_Su\Delta_Sv.
+\end{equation*}
+\end{frame}
+\begin{frame}
+\frametitle{\small 2. Reaction-diffusion systems on evolving surfaces}
+$\qquad$Let $S(t)$ be an evolving two-dimensional hypersurface in $\mathbb{R}^3$ bounding a time-dependent domain $\Omega(t)$. Let the velocity of material points on $S(t)$ be denoted by $\boldsymbol{v}:=V\boldsymbol{n}+\boldsymbol{v}_T$ where $\boldsymbol{n}$ is the unit outward pointing normal to $\Omega(t)$, $V$ is the normal velocity and $\boldsymbol{v}_T$ is a velocity field tangential to the surface. Let $\boldsymbol{u}$ be a vector of scalar concentration fields $\left\{u_i\right\}_{i=1}^m$, Let $\mathcal{R}(t)$ be an arbitrary material portion of $S(t)$ where each point moves with the material velocity.According to the mass balance conservation law:
+\begin{equation*}
+\frac{d}{dt}\int_{\mathcal{R}(t)}u_i=-\int_{\partial\mathcal{R}(t)}\boldsymbol{q}_i\cdot\boldsymbol{\nu}+\int_{\mathcal{R}(t)}f_i(\boldsymbol{u})\qquad(1)
+\end{equation*}
+
+where, for each component $i$, $\boldsymbol{q}_i$ and $f_i(\boldsymbol{u})$ are respectively, the surface flux through the boundary of $\mathcal{R}(t)$ and the net production rate within the surface.
+\end{frame}
+
+\begin{frame}
+The components of $\boldsymbol{q}$ normal to $S$ do not contribute to the flux so we can assume $\boldsymbol{q}$ is a tangent vector. Using integration by parts it follows that
+\begin{equation*}
+\int_{\partial\mathcal{R}(t)}\boldsymbol{q}\cdot\boldsymbol{n}=\int_{\mathcal{R}(t)}\nabla_S\cdot\boldsymbol{q}+\int_{\mathcal{R}(t)}\boldsymbol{q}\cdot\boldsymbol{n}H=\int_{\mathcal{R}(t)}\nabla_S\cdot\boldsymbol{q}
+\end{equation*}
+On the other hand, for the left-hand side of (1), we use the transport formula
+\begin{equation*}
+\frac{d}{dt}\int_{\mathcal{R}(t)}\eta=\int_{\mathcal{R}(t)}\partial\bullet\eta+\eta\nabla_S\cdot \boldsymbol{v}
+\end{equation*}
+for any material region of the surface evolving with the material velocity $\boldsymbol{v}$ where
+\begin{equation*}
+\partial\bullet\eta:=\eta_t+\boldsymbol{v}\cdot\nabla\eta\qquad(2)
+\end{equation*}
+denotes the material derivative. 
+\end{frame}
+\begin{frame}
+Combining the two equations results in
+\begin{equation*}
+\int_{\mathcal{R}(t)}\partial\bullet u_i+u_i\nabla_S\cdot\boldsymbol{v}+\nabla_S\cdot\boldsymbol{q}_i=\int_{\mathcal{R}(t)}f_i(\boldsymbol{u})
+\end{equation*}
+Since $\mathcal{R}(t)$ is arbitrary for all time $t$, we conclude that
+\begin{equation*}
+\partial\bullet u_i+u_i\nabla_S\cdot\boldsymbol{v}+\nabla_S\cdot\boldsymbol{q}_i=f_i(\boldsymbol{u})\qquad(3)
+\end{equation*}
+For the constitutive law relating the flux to the concentrations, assuming no cross-diffusion between the chemical species, we set $
+\mathcal{D}$ to be a diffusivity tensor(a diagonal matrix diffusion coefficients)and assume that the chemical species diffuse according to Fick's law
+\begin{equation*}
+\boldsymbol{q}_i=-\mathcal{D}_{ij}\nabla_Su_j\qquad(4)
+\end{equation*}
+where $\mathcal{D}_{ij}=d_i\delta_{ij}$, with $\delta_{ij}$ representing the usual Kronecker delta function.
+\end{frame}
+
+\begin{frame}
+Then (3) becomes
+\begin{equation*}
+\partial\bullet u_i+u_i\nabla_S\cdot\boldsymbol{v}=\nabla_S(\mathcal{D}_{ij}\nabla_Su_j)+f_i(\boldsymbol{u})\quad on\quad S(t)
+\end{equation*}
+In vector form, the system of reaction-diffusion equations on an evolving surface $S(t)$ takes the form
+\begin{equation*}
+\partial\bullet\boldsymbol{u}+\boldsymbol{u}\nabla_S\cdot\boldsymbol{v}=D\Delta_S\boldsymbol{u}+\boldsymbol{f}(\boldsymbol{u})\qquad(5)
+\end{equation*}
+where $D=diag(d_i)$. This system is supplemented with zero-flux boundary conditions if the boundary of $S(t)$ is non-empty and the initial conditions
+\begin{equation*}
+\boldsymbol{u}(\cdot, 0)=\boldsymbol{u}_0(\cdot)\quad on\quad S(0)\qquad(6)
+\end{equation*}
+where the components of $\boldsymbol{u}_0(\cdot)$ are prescribed positive bounded functions.
+\end{frame}
+
+\begin{frame}
+\frametitle{\small 3. Surface finite element method}
+3.1 Variational formulation
+
+For an arbitray $i$ 
+\begin{equation*}
+\partial\bullet u_i+u_i\nabla_S\cdot\boldsymbol{v}=d_i\Delta_Su_i+f_i(\boldsymbol{u})\qquad(7)
+\end{equation*}
+Let $\varphi(\cdot, t)\in H^1(S(t))$ be a test function. Multiplying(7) by $\varphi$ and integrating over $S(t)$ leads to 
+\begin{equation*}
+\begin{aligned}
+\int_{S(t)}f_i(\boldsymbol{u})\varphi=&\int_{S(t)}\partial\bullet u_i\varphi+u_i\varphi\nabla_S\cdot\boldsymbol{v}-d_i\int_{S(t)}\varphi\Delta_Su_i\\
+=&\int_{S(t)}\partial\bullet u_i\varphi+u_i\varphi\nabla_S\cdot\boldsymbol{v}+d_i\int_{S(t)}\nabla_Su_i\cdot\nabla_S\varphi\\
+-&\int_{\partial S(t)}\varphi\nabla_Su_i\cdot\boldsymbol{\nu}.\qquad(8)
+\end{aligned}
+\end{equation*}
+\end{frame}
+
+\begin{frame}
+The last term vanishes if $\partial S(t)=\varnothing$ or $\partial S(t)\ne\varnothing$ but $\varphi=0$ or $\nabla_Su_i\cdot\boldsymbol{\nu}=0$ on $\partial S(t)$. Hence, assuming any of these conditions holds we have
+\begin{equation*}
+\begin{aligned}
+\int_{S(t)}f_i(\boldsymbol{u})\varphi=&\int_{S(t)}\partial\bullet u_i\varphi+u_i\varphi\nabla_S\cdot\boldsymbol{v}+d_i\int_{S(t)}\nabla_Su_i\cdot\nabla_S\varphi\\
+=&\int_{S(t)}\partial\bullet (u_i\varphi)-u_i\partial\bullet\varphi+u_i\varphi\nabla_S\cdot\boldsymbol{v}+d_i\int_{S(t)}\nabla_Su_i\cdot\nabla_S\varphi\\
+=&\frac{d}{dt}\int_{S(t)}u_i\varphi-\int_{S(t)}u_i\partial\bullet\varphi+d_i\int_{S(t)}\nabla_Su_i\cdot\nabla_S\varphi\qquad(9)
+\end{aligned}
+\end{equation*}
+The variational form seeks to find $u_i\in H^1(S(t))$ satisfying
+\begin{equation*}
+\begin{aligned}
+\frac{d}{dt}&\int_{S(t)}u_i\varphi-\int_{S(t)}u_i\partial\bullet\varphi+d_i\int_{S(t)}\nabla_Su_i\cdot\nabla_S\varphi\\
+=&\int_{S(t)}f_i(\boldsymbol{u})\varphi,\quad\forall\varphi\in H^1(S(t))\qquad(10)
+\end{aligned}
+\end{equation*}
+\end{frame}
+
+\begin{frame}
+3.2 Evolving surface finite element method
+
+We approximate $S(t)$ by $S_h(t)$, a triangulated surface whose vertices lie on $S(t)$, $i,e.$ $S_h(t)=\mathcal{T}_h(t)=\bigcup_kT_k(t)$, where each $T_k(t)$ is a triangle. The diameter of the largest triangle in the initial surface is denoted by $h$. We choose the vertices of the triangulation to evolve with the material velocity so that
+\begin{equation*}
+\dot{X}_j(t)=\boldsymbol{v}(X_j(t), t)\qquad(11)
+\end{equation*}
+and it is easy to see that $X_j(t)$ lies on $S(t)$ if $\boldsymbol{v}$ is the exact material velocity. We assume $S_h(t)$ is smooth in time. For each $t$ we define a finite  element space
+\begin{equation*}
+S_h(t)=\left\{\phi\in C^0(S_h(t)):\phi\bigg|_{T_k} is\quad linear\quad affine\quad for\quad each T_k\in\mathcal{T}_k(t) \right\}.
+\end{equation*}
+\end{frame}
+
+\begin{frame}
+For each $t\in[0, T]$ we denote by $\left\{\chi_j(\cdot, t)_{j=1}^N\right\}$ the moving nodal basis functions and by $X_j(t)$, $j=1,\cdots,N$ the nodes. These functions will satisfy
+\begin{equation*}
+\chi_j(\cdot, t)\in C^0(S_h(t)),\quad\chi_j(X_i(t), t)=\delta_{ij},\quad\chi_j(\cdot, t)\bigg|_{T_k} is\quad linear\quad affine
+\end{equation*}
+and on $T_k\in\mathcal{T}_h(t)$
+\begin{equation*}
+\chi_j\bigg|_e=\lambda_k,\quad for\quad each\quad e\in\mathcal{T}_h(t)
+\end{equation*}
+where $k=k(T_k, j)$ and $(\lambda_1, \lambda_2, \lambda_3)$ are the barycentric coordinates.
+
+On $S_h(t)$ we define the discrete material velocity
+\begin{equation*}
+\boldsymbol{v}_h=\sum\limits_{j=1}^N\dot{X}_j(t)\chi_j\qquad(12)
+\end{equation*}
+and the discrete material derivative
+\begin{equation*}
+\partial_h\bullet\phi=\phi_t+v_h\cdot\nabla\phi\qquad(13)
+\end{equation*}
+\end{frame}
+
+\begin{frame}
+We seek approximations $U_i(\cdot, t)\in S_h(t)$ to $u_i$. Since $\left\{\chi_j(\cdot, t)_{j=1}^N\right\}$ is the basis of $S_h(t)$ we know for each $U_i(\cdot, t)\in S_h(t)$ and each $t\in[0, T]$ that there exist unique $\boldsymbol{\alpha}_i=\left\{\alpha_i^1(t),\dots,\alpha_i^N(t)\right\}$ satisfying
+\begin{equation*}
+U_i(\cdot, t)=\sum\limits_{j=1}^N\alpha_i^j(t)\chi_j(\cdot, t).
+\end{equation*}
+Substituting $U_i(\cdot, t)$, $S_h(t)$ and $\phi\in S_h(t)$ for $u_i$, $S_(t)$ and $\varphi$ in (10) we obtain
+\begin{equation*}
+\begin{aligned}
+&\frac{d}{dt}\int_{S_h(t)}\sum\limits_{j=1}^N\alpha_i^j(t)\chi_j\phi-\int_{S_h(t)}\sum\limits_{j=1}^N\alpha_i^j(t)\chi_j\partial_h\bullet\phi\\
+&+d_i\int_{S_h(t)}\sum\limits_{j=1}^N\alpha_i^j(t)\nabla_{S_h(t)}\chi_j\cdot\nabla_{S_h(t)}\phi=\int_{S_h(t)}f_i\phi,\qquad(14)
+\end{aligned}
+\end{equation*}
+\end{frame}
+
+\begin{frame}
+for all $\phi\in S_h(t)$ and taking $\phi=\chi_k, k=1,\cdots, N$ and using the transport property of the basis functions we obtain
+\begin{equation*}
+\frac{d}{dt}(\mathcal{M}(t)\boldsymbol{\alpha}_i)+d_i\mathcal{S}(t)\boldsymbol{\alpha}_i=\boldsymbol{F}_i(t)\qquad(15)
+\end{equation*}
+where $\mathcal{M}(t)$ is the evolving mass matrix
+\begin{equation*}
+\mathcal{M}(t)_{jk}=\int_{S_h(t)}\chi_j\chi_k
+\end{equation*}
+$\mathcal{S}(t)$ is the evolving stiffness matrix
+\begin{equation*}
+\mathcal{S}(t)_{jk}=\int_{S_h(t)}\nabla_{S_h}\chi_j\cdot\nabla_{S_h}\chi_k
+\end{equation*}
+and $\boldsymbol{F}_i$ is the right hand side $\boldsymbol{F}_{ij}=\int_{S_h(t)}f_i(\boldsymbol{U})\phi_j$
+\end{frame}
+
+\begin{frame}
+\frametitle{\small 4.Time discretization}
+For simplicity we restrict the description to the two components system $\boldsymbol{u}=(u, w)$ with kinetics given by 
+
+\begin{equation*}
+    \boldsymbol{f}(\boldsymbol{u})=(f_1, f_2)^T=\left(\gamma(a-u+u^2w),\gamma(b-u^2w)\right)^T
+\end{equation*}
+
+and $d_1=1, d_2=d$. We discretise in time using a uniform time step $\tau$. We represent by $(U^n, W^n)$ the solution at time $n\tau$. Let $U^0, W^0\in S_h(0)$ be given. For $n=0,\cdots,n_T$, solve the nonlinear system
+\begin{equation*}
+\begin{cases}
+\begin{aligned}
+&\frac{1}{\tau}\int_{S_h^{n+1}}U^{n+1}\chi_j^{n+1}+\int_{S_h^{n+1}}\nabla_{S_h^n}U^{n+1}\cdot\nabla_{S_h^n}\chi_j^{n+1}\\
+&=\frac{1}{\tau}\int_{S_h^n}U^n \chi_j^n + \int_{S_h^{n+1}}f_1(U^{n+1}, W^{n+1})\chi_j^{n+1}\\
+&\frac{1}{\tau}\int_{S_h^{n+1}}W^{n+1}\chi_j^{n+1}+d\int_{S_h^{n+1}}\nabla_{S_h^n}W^{n+1}\cdot\nabla_{S_h^n}\chi_j^{n+1}\\
+&=\frac{1}{\tau}\int_{S_h^n}W^n\chi_j^n+\int_{S_h^{n+1}}f_2(U^{n+1}, W^{n+1})\chi_j^{n+1}
+\end{aligned}
+\end{cases}
+\end{equation*}
+\end{frame}
+
+\begin{frame}
+For all $j=1,\cdots,N$. To linearise $f_1(U^{n+1}, W^{n+1})$ we assume slow deformation of the evolving surface which allows us to write $(U^{n+1})^2\approx U^nU^{n+1}$ (Madzvamuse 2006).
+
+Using this linearisation, we can derive the following fully discrete algorithm:
+
+Let $U^0, W^0\in S_h(0)$ be given. For $n=0,\cdots,n_T$, solve the linear system
+\begin{equation*}
+\begin{cases}
+\begin{aligned}
+&(\frac{1}{\tau}+\gamma)\int_{S_h^{n+1}}U^{n+1}\chi_j^{n+1}+\int_{S_h^{n+1}}\nabla_{S_h^n}U^{n+1}\cdot\nabla_{S_h^n}\chi_j^{n+1}\\
+&-\gamma\int_{S_h^{n+1}}U^nW^nU^{n+1}\chi_j^{n+1}=\frac{1}{\tau}\int_{S_h^n}U^n \chi_j^n + \gamma a\int_{S_h^n}\chi_j^{n}\\
+&\frac{1}{\tau}\int_{S_h^{n+1}}W^{n+1}\chi_j^{n+1}+d\int_{S_h^{n+1}}\nabla_{S_h^n}W^{n+1}\cdot\nabla_{S_h^n}\chi_j^{n+1}\\
+&+\gamma\int_{S_h^{n+1}}(U^{n+1})^2W^{n+1}\chi_j^{n+1}=\frac{1}{\tau}\int_{S_h^n}W^n\chi_j^n+\gamma b\int_{S_h^n}\chi_j^n
+\end{aligned}
+\end{cases}
+\end{equation*}
+\end{frame}
+
+\begin{frame}
+For all $j=1,\cdots,N$. Using a matrix representation we have
+\begin{equation*}
+\begin{cases}
+\left(\left(\frac{1}{\tau}+\gamma\right)\mathcal{M}^{n+1}+\mathcal{S}^{n+1}-\gamma\mathcal{M}_1^{n+1}\right)\boldsymbol{U}^{n+1}=\frac{1}{\tau}\mathcal{M}^n\boldsymbol{U}^n+\boldsymbol{F}_1^n\\
+\left(\frac{1}{\tau}\mathcal{M}^{n+1}+d\mathcal{S}^{n+1}+\gamma\mathcal{M}_2^{n+1}\right)\boldsymbol{W}^{n+1}=\frac{1}{\tau}\mathcal{M}^n\boldsymbol{W}^n+\boldsymbol{F}_2^n
+\end{cases}
+\end{equation*}
+with
+\begin{equation*}
+\mathcal{M}_{ij}^n=\int_{S_h^n}\chi_i^n\chi_j^n,\quad\mathcal{M}_{1ij}^n=\int_{S_h^n}U^nW^n\chi_i^n\chi_j^n,\quad\mathcal{M}_{2ij}^n=\int_{S_h^n}(U^{n+1})^2\chi_i^n\chi_j^n,
+\end{equation*}
+\begin{equation*}
+\mathcal{S}_{ij}^n=\int_{S_h^n}\nabla_{S_h^n}\chi_i^n\cdot\nabla_{S_h^n}\chi_j^n,\quad\boldsymbol{F}_{1i}^n=\gamma a\int_{S_h^n}\chi_i^n,\quad\boldsymbol{F}_{2i}^n=\gamma b\int_{S_h^n}\chi_i^n
+\end{equation*}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,42 @@
+function myplot()
+
+load iteration.dat;
+iteration;
+
+%%%% energy
+%plot(iteration(:,3));
+
+
+figure1 = figure('color', 'white');
+axes1 = axes('Parent', figure1, 'FontName','Times New Roman',...
+	 'FontSize',25);
+set(gca,'linewidth',3)      %| 设置图形外边框的线宽
+set(gcf, 'unit', 'normalized', 'position', [0.05, 0.05, 0.85, 0.85])
+box on
+
+%%%% energy difference
+semilogy(abs(iteration(:,4)), 'LineStyle', '-', 'LineWidth', 2, ...
+	'color', [0 0 0]);
+hold on 
+
+ylimLeft = 1.0e-6;
+ylimRight = 0;
+ylim([ylimLeft, ylimRight])
+
+%%% ITER 0 : Radius = 3.650000000000000e+00, energy = -2.922491807500102e+00
+
+ &&&&&& ITER 1 : Radius = 4.465354656568261e+00, energy = -2.992683121868449e+00, dtol_energy = -7.019131436834680e-02, 
+ &&&&&& ITER 2 : Radius = 4.427834214964906e+00, energy = -2.992890137626074e+00, dtol_energy = -2.070157576250509e-04, 
+ &&&&&& ITER 3 : Radius = 4.440595356396372e+00, energy = -2.992492460540690e+00, dtol_energy = 3.976770853837408e-04, 
+ &&&&&& ITER 4 : Radius = 4.433995908027837e+00, energy = -2.992523240381378e+00, dtol_energy = -3.077984068777795e-05, 
+ &&&&&& ITER 5 : Radius = 4.436371900021624e+00, energy = -2.992462640785843e+00, dtol_energy = 6.059959553539329e-05, 
+ &&&&&& ITER 6 : Radius = 4.434223940194329e+00, energy = -2.992448608108361e+00, dtol_energy = -7.716381661371230e-05, 
+ &&&&&& ITER 7 : Radius = 4.436024745554335e+00, energy = -2.992439908185184e+00, dtol_energy = 8.699923177424296e-06, 
+ &&&&&& ITER 8 : Radius = 4.435214141208949e+00, energy = -2.992452212393655e+00, dtol_energy = -1.230420847075919e-05, 
+ &&&&&& ITER 9 : Radius = 4.435574689038679e+00, energy = -2.992458565863010e+00, dtol_energy = -6.353469355069308e-06, 
+ &&&&&& ITER 10 : Radius = 4.435621488760628e+00, energy = -2.992449293589280e+00, dtol_energy = 9.272273730154268e-06, 
+ &&&&&& ITER 11 : Radius = 4.435475019647649e+00, energy = -2.992445956436546e+00, dtol_energy = 3.337152733706716e-06, 
+ &&&&&& ITER 12 : Radius = 4.435428206848609e+00, energy = -2.992445839048598e+00, dtol_energy = 1.173879482507800e-07, 
+
+
+end

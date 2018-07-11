@@ -1,0 +1,143 @@
+function new_radius = adaptSurface(radius, scft, cmp_pmt, init_mesh, Mthd, tol)
+%%%%%  use restarted nonlinear conjuate gradient method to adjust the radius of surface
+
+	%%%% the step length for computing difference quotient
+	dh = 1.0e-2;
+	%%%% the parameter for restarted CG
+	gamma = 0.2;
+
+	eps = inf;
+	iter = 0;
+	oldgradB = 0;
+
+	fprintf('\t\t Before optimize radius : %.15e\n', radius);
+	while(eps > tol && iter < 50)
+		iter = iter+1;
+		%%%%%  compute difference quotient instead of calculating
+		%%%%%  the value of derivate
+		rrad = radius + dh;
+		fr = calPartialF(rrad, scft, cmp_pmt, init_mesh, Mthd);
+		lrad = radius - dh;
+		fl = calPartialF(lrad, scft, cmp_pmt, init_mesh, Mthd);
+		gradB = (fr-fl) / (2.0*dh);
+		fprintf('[FR, FL, gradB] = [%.15e, \t%.15e, \t%.15e]\n', fr, fl, gradB);
+		if(iter == 1)
+			grad = -gradB;
+		else
+			crit = abs(gradB*oldgradB) - gamma*oldgradB*oldgradB;
+			if(crit >= 0 && iter > 2)
+				fprintf('iter %d: crit = %.15e\t Restart CG', iter, crit);
+			%%%%  restarted CG 
+				grad = -gradB;
+			else
+				%%%% Fletcher-Reeves formula
+	%%%%            beta = gradB*gradB / (oldgradB*oldgradB);
+				%%%% Polak-Ribiere formula
+				beta = gradB*(gradB-oldgradB) / (oldgradB*oldgradB);
+				beta = max(0, beta);
+				grad = grad*beta - gradB
+			end
+		end
+		intval = lineEvalIntval(grad, radius, scft, cmp_pmt, init_mesh, Mthd);
+		%%%%%%%  the search step length
+		alpha = lineSearchFMin(intval, grad, 1.0e-3, radius, scft, cmp_pmt, init_mesh, Mthd);
+		fprintf('\t Search step size: %f\n', alpha);
+		oldgradB = gradB;
+		radius = radius - alpha*gradB;
+	%%%% l2-norm
+		eps = sqrt(gradB*gradB);
+		fprintf('\t eps: %.15e\n', eps);
+	end
+	new_radius = radius;
+	fprintf('\n\t\t After optimize radius : %.15e\n\n', new_radius);
+end
+
+function intval = lineEvalIntval(grad, radius, scft, cmp_pmt, init_mesh, Mthd)
+%%%%%  using back-forth-method to determine the search interval
+
+b = 0.0;
+a0 = 0.0;
+h = 0.01;
+t = 2.0;
+
+rad = radius + grad*a0;
+phi0 = calPartialF(rad, scft, cmp_pmt, init_mesh, Mthd);
+k = 0;
+
+while(1)
+	k = k+1;
+
+	a1 = a0 + h;
+	rad = radius + grad*a1;
+	phi1 = calPartialF(rad, scft, cmp_pmt, init_mesh, Mthd);
+
+	fprintf('search interval %d : [%e, %e]\n', k, a0, a1);
+	fprintf('\t\t [phi0, phi1] = [%.15e, %.15e]\n', phi0, phi1);
+
+	if(phi1 < phi0)
+		h = t*h;
+		b = a0;
+		a0 = a1;
+		phi0 = phi1;
+	elseif(k==1)
+		h = -1.0*h;
+		a0 = a1;
+		phi0 = phi1;
+	else 
+		intval(1) = min(b, a1);
+		intval(2) = max(b, a1);
+		break;
+	end
+end
+
+fprintf('\tSearch Interval : [%f, %f]\n', intval(1), intval(2));
+
+end
+
+function step = lineSearchFMin(intval, grad, tol, radius, scft, cmp_pmt, init_mesh, Mthd)
+%%%%%  using 0.618 principle to find the minimizer
+
+a0 = intval(1);
+b0 = intval(2);
+p0 = a0 + 0.382*(b0-a0);
+p1 = a0 + 0.618*(b0-a0);
+
+lrad = radius + grad*p0;
+phi0 = calPartialF(lrad, scft, cmp_pmt, init_mesh, Mthd);
+
+rrad = radius + grad*p1;
+phi1 = calPartialF(rrad, scft, cmp_pmt, init_mesh, Mthd);
+
+err = 1.0;
+
+while(1)
+	if (phi0 > phi1)
+		if(abs(b0-p0)<=tol)
+			step = p1;
+			break;
+		else
+			a0 = p0;
+			b0 = b0;
+			p0 = p1;
+			phi0 = phi1;
+			p1 = a0 + 0.618*(b0-a0);
+			rad = radius + grad*p1;
+			phi1 = calPartialF(rad, scft, cmp_pmt, init_mesh, Mthd);
+		end
+	else 
+		if(abs(a0-p1)<=tol)
+			step = p0;
+			break;
+		else
+			a0 = a0;
+			b0 = p1;
+			p1 = p0;
+			phi1 = phi0;
+			p0 = a0 + 0.318*(b0-a0);
+			rad = radius + grad*p0;
+			phi0 = calPartialF(rad, scft, cmp_pmt, init_mesh, Mthd);
+		end
+	end
+end
+
+end
